@@ -78,11 +78,20 @@ class TasksViewController: UITableViewController {
             tableView.moveRow(at: indexPath, to: newIndexPath)
             isDone(true)
         }
+        
+        let undoneAction = UIContextualAction(style: .normal, title: "Undone") { _, _, isDone in
+            StorageManager.shared.undone(task)
+            let newIndexPath = IndexPath(row: 0, section: 0)
+            tableView.moveRow(at: indexPath, to: newIndexPath)
+            isDone(true)
+        }
 
         editAction.backgroundColor = .orange
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         
-        return UISwipeActionsConfiguration(actions: [deleteAction, editAction, doneAction])
+        return indexPath.section == 0 ?
+        UISwipeActionsConfiguration(actions: [deleteAction, editAction, doneAction]) :
+        UISwipeActionsConfiguration(actions: [deleteAction, editAction, undoneAction])
     }
     
     @objc private func addButtonPressed() {

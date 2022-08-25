@@ -44,7 +44,7 @@ class TaskListViewController: UITableViewController {
         content.text = taskList.name
         
         var uncompletedTasksCounter = String(taskList.tasks.filter("isComplete = false").count)
-        if uncompletedTasksCounter == "0" {
+        if uncompletedTasksCounter == "0" && taskList.tasks.count > 0 {
             uncompletedTasksCounter = "✓"
         }
         content.secondaryText = uncompletedTasksCounter
@@ -90,6 +90,17 @@ class TaskListViewController: UITableViewController {
     }
 
     @IBAction func sortingList(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            taskLists = taskLists.sorted(byKeyPath: "date", ascending: true)
+        } else {
+            taskLists = taskLists.sorted(byKeyPath: "name", ascending: true)
+        }
+        
+        var allIndexPath: [IndexPath] = []
+        for row in 0..<taskLists.count {
+            allIndexPath.append(IndexPath(row: row, section: 0))
+        }
+        tableView.reloadRows(at: allIndexPath, with: .automatic)
     }
     
     @objc private func addButtonPressed() {

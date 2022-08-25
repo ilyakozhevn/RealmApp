@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import UIKit
 
 class StorageManager {
     static let shared = StorageManager()
@@ -37,35 +38,15 @@ class StorageManager {
         }
     }
     
-    func delete(_ task: Task) {
-        write {
-            realm.delete(task)
-        }
-    }
-    
     func edit(_ taskList: TaskList, newValue: String) {
         write {
             taskList.name = newValue
-        }
-    }
-    
-    func edit(_ task: Task, newTask: String, newNote: String) {
-        write {
-            task.name = newTask
-            task.note = newNote
-            task.isComplete = false
         }
     }
 
     func done(_ taskList: TaskList) {
         write {
             taskList.tasks.setValue(true, forKey: "isComplete")
-        }
-    }
-    
-    func done(_ task: Task) {
-        write {
-            task.setValue(true, forKey: "isComplete")
         }
     }
 
@@ -75,6 +56,32 @@ class StorageManager {
             let task = Task(value: [task, note])
             taskList.tasks.append(task)
             completion(task)
+        }
+    }
+    
+    func delete(_ task: Task) {
+        write {
+            realm.delete(task)
+        }
+    }
+    
+    func done(_ task: Task) {
+        write {
+            task.setValue(true, forKey: "isComplete")
+        }
+    }
+    
+    func undone(_ task: Task) {
+        write {
+            task.setValue(false, forKey: "isComplete")
+        }
+    }
+    
+    func edit(_ task: Task, newTask: String, newNote: String) {
+        write {
+            task.name = newTask
+            task.note = newNote
+            task.isComplete = false
         }
     }
     

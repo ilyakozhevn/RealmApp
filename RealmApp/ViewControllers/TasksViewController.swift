@@ -89,9 +89,13 @@ class TasksViewController: UITableViewController {
         editAction.backgroundColor = .orange
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         
-        return indexPath.section == 0 ?
-        UISwipeActionsConfiguration(actions: [deleteAction, editAction, doneAction]) :
-        UISwipeActionsConfiguration(actions: [deleteAction, editAction, undoneAction])
+        return UISwipeActionsConfiguration(
+            actions: [
+                indexPath.section == 0 ? doneAction : undoneAction,
+                editAction,
+                deleteAction
+            ]
+        )
     }
     
     @objc private func addButtonPressed() {
